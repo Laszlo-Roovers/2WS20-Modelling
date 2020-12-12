@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from helper_functions import *
+from helper_functions import setup, distribution_f, density_f
 
 
 def graph_distribution_f(min_x: float, max_x: float, step=0.001,
