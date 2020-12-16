@@ -26,3 +26,29 @@ def density_f(x) -> float:
         return 1
     else:
         return 0
+
+
+def second_highest_bid(players: int, bid: float) -> float:
+    if players == 3:
+        if bid <= 0:
+            return 0
+        elif 0 < bid < 1:
+            return 2 * bid * (1 - bid)
+        else:
+            return 0
+
+    if players == 4:
+        if bid <= 0:
+            return 0
+        elif 0 < bid < 1:
+            return 3 * bid**2 * (1 - bid)
+        else:
+            return 0
+
+    # General case. This could also replace the two cases above.
+    if bid <= 0:
+        return 0
+    elif 0 < bid < 1:
+        return players * bid**(players-1) - players * bid**players
+    else:
+        return 0
