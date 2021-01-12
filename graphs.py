@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
-from helper_functions import setup, distribution_f, density_f, second_highest_bid
+from helper_functions import setup, distribution_f, density_f, \
+    second_highest_bid, density_kumaraswamy
 
 
 def graph_distribution_f(min_x: float, max_x: float, step=0.001,
@@ -93,18 +94,18 @@ def graph_second_highest_bid(players: int, min_b: float, max_b: float,
         for index in range(len(x)):
             y[index] = second_highest_bid(players, x[index])
         fig, ax = plt.subplots()
-        ax.plot(x, y, label="P(R2 < b < R1)")
+        ax.plot(x, y, label="P(Bs < b < Bmax)")
     else:
         fig, ax = plt.subplots()
         for player in range(3, players+1):
             for index in range(len(x)):
                 y[index] = second_highest_bid(player, x[index])
-            ax.plot(x, y, label="P(R2 < b < R1) " + str(player) + " players")
+            ax.plot(x, y, label="P(Bs < b < Bmax) " + str(player) + " players")
 
     # Add details to graph
     plt.xlim(min_b, max_b)
     plt.ylim(0, 1)
-    ax.set(xlabel="b", ylabel="P(R2 < b < R1)", title="Probability second "
+    ax.set(xlabel="b", ylabel="P(Bs < b < Bmax)", title="Probability second "
                                                       "highest bid various "
                                                       "amount of players")
     ax.grid()
@@ -117,4 +118,26 @@ def graph_second_highest_bid(players: int, min_b: float, max_b: float,
         fig.savefig("second_highest_" + str(players) + ".png")
 
 
-graph_second_highest_bid(7, 0, 1, mode="save", multiple=True)
+def graph_density_kumaraswamy(min_x: float, max_x: float, step=0.001,
+                              mode="view") -> None:
+    # Initialization
+    x, y = setup(min_x, max_x, step)
+
+    # Piecewise function definition
+    for index in range(len(x)):
+        y[index] = density_kumaraswamy(x[index])
+
+    # Generate graph
+    fig, ax = plt.subplots()
+    ax.plot(x, y)
+
+    # Add details to graph
+    plt.xlim(min_x, max_x)
+    ax.set(xlabel="x", ylabel="f(x)", title="Kumaraswamy density f(x)")
+    ax.grid()
+
+    # Process request
+    if mode == "view":
+        plt.show()
+    elif mode == "save":
+        fig.savefig("density_kumaraswamy.png")
